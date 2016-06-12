@@ -3,11 +3,11 @@ import json
 import sys
 reload(sys)
 sys.setdefaultencoding( "utf-8" )
-import hashlib
+from bson import ObjectId
 
 
 object_list=[]
-course_list=[]
+course_dict={}
 
 teacher_list=[]
 comment_list=[]
@@ -26,22 +26,25 @@ for i in range(4):
 for obj in object_list:
     length=len(obj["comments"])
     if length>0:
-        new_obj={}
-        new_obj["dept"]=obj["dept"]
-        new_obj["name"]= obj["name"]
-        new_obj["id"]=obj["url"][-6:]
-        teacher_list.append(new_obj)
-        for com in obj["comments"]:
-            new_com={}
-            new_com["course"]=com["course"]
-            new_com["content"]= com["content"]
-            new_com["teacher_id"]= new_obj["id"]
-            new_com["c_id"]=hashlib.md5(com["content"]).hexdigest()
-            comment_list.append(new_com)
-            if com["course"]:
-                new_co={}
-                new_co["teacher"]=new_obj["id"]
-                new_co["name"]=com["course"]
-                new_co["c_id"]=hashlib.md5(com["course"]).hexdigest()
-                new_co["dep"]=obj["dept"]
-                course_list.append(new_co)
+        new_teacher={}
+        new_teacher["_id"]=ObjectId()
+        new_teacher["department"]=obj["dept"]
+        new_teacher["name"]= obj["name"]
+        teacher_list.append(new_teacher)
+        for comment in obj["comments"]:
+            course=course_dict.get(comment["course"])
+            if not course:
+                new_course={}
+                new_course["_id"]=ObjectId()
+                new_course["teacher_id"]=new_teacher["_id"]
+                new_course["name"]=comment["course"]
+                new_course["department"]=obj["dept"]
+                course_dict[comment["course"]]=new_course
+                course=new_course
+            new_comment={}
+            new_comment["course_id"]=course["_id"]
+            new_comment["content"]= comment["content"]
+            new_comment["teacher_id"]= new_teacher["_id"]
+            comment_list.append(new_comment)
+
+course_list = [ course_dict[k] for k in course_dict ]

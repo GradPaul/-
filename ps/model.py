@@ -8,7 +8,7 @@ class Teachers(Document):
 
     teacher_id=StringField()
     name = StringField()
-    dep= StringField()
+    department= StringField()
     ctime=DateTimeField(default=datetime.datetime.now)
 
 
