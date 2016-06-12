@@ -1,10 +1,32 @@
 # -*- coding: utf-8 -*-
 import json
+import random
 import sys
 reload(sys)
 sys.setdefaultencoding( "utf-8" )
 from bson import ObjectId
 
+user_list=[
+    {
+        "_id": ObjectId(),
+        "name": "郑立迪",
+    },{
+        "_id": ObjectId(),
+        "name": "陈心远",
+    },{
+        "_id": ObjectId(),
+        "name": "潘星阳",
+    },{
+        "_id": ObjectId(),
+        "name": "杨寒秋",
+    },{
+        "_id": ObjectId(),
+        "name": "王佩佩",
+    },{
+        "_id": ObjectId(),
+        "name": "钟典",
+    }
+]
 
 object_list=[]
 course_dict={}
@@ -42,6 +64,7 @@ for obj in object_list:
                 course_dict[comment["course"]]=new_course
                 course=new_course
             new_comment={}
+            new_comment["user_id"]=random.choice(user_list).get("_id")
             new_comment["course_id"]=course["_id"]
             new_comment["content"]= comment["content"]
             new_comment["teacher_id"]= new_teacher["_id"]

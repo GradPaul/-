@@ -3,6 +3,14 @@ from pymongo import MongoClient
 
 db = MongoClient("127.0.0.1:27017")["gdp"]
 
+db.users.remove({})
+db.teachers.remove({})
+db.courses.remove({})
+db.comments.remove({})
+
+for u in user_list:
+    db.users.insert(u)
+
 for t in teacher_list:
     db.teachers.insert(t)
 
